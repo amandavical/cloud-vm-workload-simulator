@@ -29,7 +29,7 @@ def executar_simulador():
     
     try:
         # 1. Módulo Geração de Carga (Integrante 2)
-        processos_originais = generate_processes(quantidade=quantidade_processos, cenario=cenario_carga)
+        processos_originais = generate_processes(quantity=quantidade_processos, cenario=cenario_carga)
         print(f"[Orquestrador] Carga única de {len(processos_originais)} processos gerada.")
         
         # Cenários de Escalonamento (Integrante 3)
