@@ -1,0 +1,28 @@
+# Bytecode e cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Distribuição e build
+dist/
+build/
+*.egg-info/
+
+# Cobertura de testes e relatórios
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Logs e arquivos de saída gerados pela simulação
+*.log
+resultados_*.png
+
+# Arquivos de configuração de IDEs
+.vscode/
+.idea/
+*.iml
