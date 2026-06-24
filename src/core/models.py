@@ -14,6 +14,7 @@ class Processo:
     id: int
     tempo_execucao: int
     tempo_chegada: int = 0
+    uso_cpu: int = 100
 
 
 @dataclass
