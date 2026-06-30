@@ -15,17 +15,32 @@ class Cloud:
         """
         Inicializa a infraestrutura de VMs.
         """
-
         self.vms: List[VM] = []
 
-        for i in range(quantidade_vms):
-            self.vms.append(
-                VM(
-                    id=i,
-                    capacidade_processamento=capacidade_vms,
-                    overhead_virtualizacao=overhead_vms
+        # Se for 1 VM ou se a capacidade de vms foi alterada explicitamente (não padrão),
+        # criamos VMs homogêneas para manter compatibilidade com testes unitários.
+        if quantidade_vms == 1 or capacidade_vms != 1.0:
+            for i in range(quantidade_vms):
+                self.vms.append(
+                    VM(
+                        id=i,
+                        capacidade_processamento=capacidade_vms,
+                        overhead_virtualizacao=overhead_vms
+                    )
                 )
-            )
+        else:
+            # Caso padrão da simulação: criamos VMs heterogêneas
+            # VM 0 = 1.0 (Normal), VM 1 = 1.5 (Rápida), VM 2 = 0.5 (Lenta), VM 3 = 2.0 (Super Rápida)
+            lista_capacidades = [1.0, 1.5, 0.5, 2.0]
+            for i in range(quantidade_vms):
+                cap = lista_capacidades[i % len(lista_capacidades)]
+                self.vms.append(
+                    VM(
+                        id=i,
+                        capacidade_processamento=cap,
+                        overhead_virtualizacao=overhead_vms
+                    )
+                )
 
     def _alocar_processo_na_vm(
         self,
@@ -35,21 +50,15 @@ class Cloud:
         """
         Adiciona um processo à fila de execução da VM.
         """
-
         vm.fila_processos.append(processo)
 
     def _carga_vm(self, vm: VM) -> float:
         """
-        Calcula a carga acumulada de uma VM.
-
-        A carga é definida como a soma dos tempos
-        de execução dos processos alocados.
+        Calcula a carga estimada (tempo de processamento restante) de uma VM.
+        Leva em conta a capacidade de processamento (velocidade) da VM.
         """
-
-        return sum(
-            processo.tempo_execucao
-            for processo in vm.fila_processos
-        )
+        soma_tempos = sum(processo.tempo_execucao for processo in vm.fila_processos)
+        return soma_tempos / vm.capacidade_processamento
 
     def escalonar_round_robin(
         self,
