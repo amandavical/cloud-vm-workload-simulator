@@ -37,20 +37,59 @@ O script principal realiza a simulação de execução de **200 processos** sobr
 
 Para rodar a simulação e gerar os relatórios e gráficos:
 ```bash
-python3 main.py
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py
 ```
-* **Saída Esperada no Console**: Uma tabela comparativa exibindo o *Makespan*, *Tempo Médio de Espera* e *Desvio de Carga* para cada cenário.
+O uso de `MPLCONFIGDIR=/tmp/matplotlib-cache` evita avisos de cache do Matplotlib em ambientes Linux onde a pasta padrão do usuário não pode ser escrita.
+
+* **Saída Esperada no Console**: Uma tabela comparativa exibindo o *Makespan*, *Tempo Médio de Espera*, *Throughput* e *Desvio de Carga* para cada cenário.
 * **Saída em Arquivo**: O gráfico comparativo de curvas de desempenho é salvo automaticamente na raiz do projeto com o nome `resultados_desempenho.png`.
 
 ---
 
-## 🧪 3. Casos de Teste (Entradas e Saídas Mapeadas)
+## 📊 3. Métricas e Visualização (Integrante 4)
+
+O módulo de análise fica em `src/analysis/` e recebe o estado final das VMs após o escalonamento e a execução da simulação.
+
+Arquivos principais:
+
+* `src/analysis/metrics.py`: calcula as métricas de desempenho.
+* `src/analysis/visualization.py`: imprime a tabela comparativa e gera o gráfico final.
+
+Funções implementadas:
+
+* `calcular_makespan(vms)`: retorna o maior tempo total de execução entre as VMs.
+* `calcular_tempo_espera_medio(vms, total_processos)`: calcula a espera média dos processos nas filas das VMs.
+* `calcular_throughput(vms, total_processos)`: calcula a vazão da simulação em processos por unidade de tempo.
+* `calcular_desvio_carga(vms)`: mede o desbalanceamento de carga entre as VMs.
+* `imprimir_tabela_comparativa(resultados)`: exibe os resultados no terminal.
+* `plotar_graficos_comparativos(resultados, caminho_imagem)`: salva o gráfico comparativo em arquivo PNG.
+
+Fluxo usado na execução completa:
+
+1. `main.py` gera os processos.
+2. `Cloud` cria as VMs, escalona os processos e executa a simulação.
+3. O módulo de métricas calcula os indicadores.
+4. O módulo de visualização imprime a tabela e gera `resultados_desempenho.png`.
+
+---
+
+## 🧪 4. Casos de Teste (Entradas e Saídas Mapeadas)
 
 A suite de testes automatizados valida as lógicas de negócio do projeto, servindo como documentação viva de **Entradas** e **Saídas** esperadas para cada módulo.
 
 Para rodar todos os testes unitários do sistema:
 ```bash
-python3 -m unittest discover -s tests
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest discover -s tests
+```
+
+Para validar apenas a parte do Integrante 4:
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest tests.test_metrics tests.test_visualization
+```
+
+Para confirmar que o gráfico foi gerado após executar o simulador:
+```bash
+ls -l resultados_desempenho.png
 ```
 
 ### Exemplos de Casos de Teste Mapeados no Código:
@@ -64,7 +103,7 @@ python3 -m unittest discover -s tests
   * VM 0 deve conter apenas o processo `P0` em sua fila local.
   * VM 1 deve conter apenas o processo `P1` em sua fila local.
 
-#### Caso de Teste 2: Escalonamento Menor Fila (`tests/test_scheduler.py`)
+#### Caso de Teste 2: Escalonamento Menor Fila (`tests/test_cloud.py`)
 * **Entrada**: 
   * 2 VMs vazias (IDs 0 e 1).
   * Lista de 4 processos: `P0` (tempo = 5), `P1` (tempo = 10), `P2` (tempo = 2), `P3` (tempo = 8).
@@ -88,3 +127,33 @@ python3 -m unittest discover -s tests
   * VM 0 com tempo de execução = 12.0.
   * VM 1 com tempo de execução = 8.0.
 * **Saída Esperada (Makespan)**: `12.0` (tempo máximo gasto para concluir todas as VMs).
+
+#### Caso de Teste 5: Visualização (`tests/test_visualization.py`)
+* **Entrada**:
+  * Lista de resultados contendo quantidade de VMs, algoritmo e métricas calculadas.
+* **Processamento**:
+  * Impressão da tabela comparativa.
+  * Geração de gráfico com Matplotlib.
+* **Saída Esperada**:
+  * A tabela é exibida sem erro.
+  * Um arquivo PNG de gráfico é criado.
+
+---
+
+## 🎓 5. Validação para Apresentação
+
+Antes da apresentação em sala, execute:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest tests.test_metrics tests.test_visualization
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest discover -s tests
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py
+ls -l resultados_desempenho.png
+```
+
+Critérios de sucesso:
+
+* Os testes da parte de métricas e visualização passam.
+* A suíte completa passa.
+* O simulador imprime a tabela comparativa.
+* O arquivo `resultados_desempenho.png` é criado.
