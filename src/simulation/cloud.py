@@ -101,6 +101,9 @@ class Cloud:
         """
         Simula a execução dos processos de uma VM.
         """
+        if not vm.fila_processos:
+            vm.tempo_total_execucao = 0.0
+            return 0.0
 
         if not vm.fila_processos:
             vm.tempo_total_execucao = 0.0
@@ -113,8 +116,9 @@ class Cloud:
 
         tempo_total += vm.overhead_virtualizacao
 
+        soma_tempos = sum(processo.tempo_execucao for processo in vm.fila_processos)
+        tempo_total = (soma_tempos / vm.capacidade_processamento) + vm.overhead_virtualizacao
         vm.tempo_total_execucao = tempo_total
-
         return tempo_total
 
     def executar_simulacao(self) -> None:
