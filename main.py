@@ -4,14 +4,13 @@ from typing import List, Dict, Any
 
 from src.simulation.workload import generate_processes
 from src.simulation.cloud import Cloud
-"""from src.analysis.metrics import (
+from src.analysis.metrics import (
     calcular_makespan,
     calcular_tempo_espera_medio,
     calcular_throughput,
     calcular_desvio_carga
 )
 from src.analysis.visualization import imprimir_tabela_comparativa, plotar_graficos_comparativos
-"""
 
 def executar_simulador():
     """
@@ -51,13 +50,13 @@ def executar_simulador():
                     
                 # Execução
                 nuvem.executar_simulacao()
-                """
+
                 # 3. Módulo Métricas (Integrante 4)
                 makespan = calcular_makespan(nuvem.vms)
                 espera_media = calcular_tempo_espera_medio(nuvem.vms, len(processos_originais))
                 throughput = calcular_throughput(nuvem.vms, len(processos_originais))
                 desvio = calcular_desvio_carga(nuvem.vms)
-                """
+
                 # Armazenamento de resultados
                 resultados.append({
                     "num_vms": num_vms,
@@ -67,11 +66,11 @@ def executar_simulador():
                     "throughput": throughput,
                     "desvio_carga": desvio
                 })
-                """
+
         # 4. Módulo Visualização (Integrante 4)
         imprimir_tabela_comparativa(resultados)
         plotar_graficos_comparativos(resultados, caminho_imagem="resultados_desempenho.png")
-        """
+
         print("[Líder Técnico] Experimento finalizado com sucesso!")
         
     except NotImplementedError as e:

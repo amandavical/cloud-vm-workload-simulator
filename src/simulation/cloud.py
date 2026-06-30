@@ -102,20 +102,16 @@ class Cloud:
         Simula a execução dos processos de uma VM.
         """
 
-        tempo_total = 0.0
+        if not vm.fila_processos:
+            vm.tempo_total_execucao = 0.0
+            return 0.0
 
-        for processo in vm.fila_processos:
+        tempo_total = sum(
+            processo.tempo_execucao
+            for processo in vm.fila_processos
+        ) / vm.capacidade_processamento
 
-            tempo_processo = (
-                processo.tempo_execucao
-                / vm.capacidade_processamento
-            )
-
-            tempo_processo += (
-                vm.overhead_virtualizacao
-            )
-
-            tempo_total += tempo_processo
+        tempo_total += vm.overhead_virtualizacao
 
         vm.tempo_total_execucao = tempo_total
 
