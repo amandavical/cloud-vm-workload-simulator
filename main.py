@@ -17,7 +17,7 @@ def executar_simulador():
     Ponto central de integração e orquestração do experimento (Líder Técnico).
     Coordenará a chamada aos submódulos para rodar os diferentes cenários.
     """
-    print("[Líder Técnico] Iniciando Simulação Simplificada de Nuvem...")
+    print("Iniciando Simulação Simplificada de Nuvem...")
     
     # Configurações do Experimento
     config_vms = [1, 2, 4, 8, 16]
@@ -29,7 +29,7 @@ def executar_simulador():
     try:
         # 1. Módulo Geração de Carga (Integrante 2)
         processos_originais = generate_processes(quantity=quantidade_processos, cenario=cenario_carga, seed=42)
-        print(f"[Orquestrador] Carga única de {len(processos_originais)} processos gerada.")
+        print(f"Carga única de {len(processos_originais)} processos gerada.")
         
         # Cenários de Escalonamento (Integrante 3)
         algoritmos = ["Round Robin", "Menor Fila (Least Loaded)"]
@@ -71,7 +71,7 @@ def executar_simulador():
         imprimir_tabela_comparativa(resultados)
         plotar_graficos_comparativos(resultados, caminho_imagem="resultados_desempenho.png")
 
-        print("[Líder Técnico] Experimento finalizado com sucesso!")
+        print("Experimento finalizado com sucesso!")
         
     except NotImplementedError as e:
         print(f"\n[INTEGRAÇÃO] Execução pausada: módulo incompleto detectado.", file=sys.stderr)
