@@ -73,10 +73,6 @@ def executar_simulador():
 
         print("Experimento finalizado com sucesso!")
         
-    except NotImplementedError as e:
-        print(f"\n[INTEGRAÇÃO] Execução pausada: módulo incompleto detectado.", file=sys.stderr)
-        print(f"  -> {e}", file=sys.stderr)
-        print("Cada integrante do grupo deve preencher sua respectiva lógica TODO para rodar por completo.", file=sys.stderr)
     except Exception as e:
         print(f"[ERRO] Erro crítico no simulador: {e}", file=sys.stderr)
 
