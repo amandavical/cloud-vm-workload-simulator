@@ -105,17 +105,6 @@ class Cloud:
             vm.tempo_total_execucao = 0.0
             return 0.0
 
-        if not vm.fila_processos:
-            vm.tempo_total_execucao = 0.0
-            return 0.0
-
-        tempo_total = sum(
-            processo.tempo_execucao
-            for processo in vm.fila_processos
-        ) / vm.capacidade_processamento
-
-        tempo_total += vm.overhead_virtualizacao
-
         soma_tempos = sum(processo.tempo_execucao for processo in vm.fila_processos)
         tempo_total = (soma_tempos / vm.capacidade_processamento) + vm.overhead_virtualizacao
         vm.tempo_total_execucao = tempo_total
