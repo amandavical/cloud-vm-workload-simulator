@@ -2,7 +2,10 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from src.analysis.visualization import plotar_graficos_comparativos, imprimir_tabela_comparativa
+from src.analysis.visualization import (
+    plotar_graficos_comparativos,
+    imprimir_tabela_comparativa
+)
 
 class TestVisualization(unittest.TestCase):
     def test_imprimir_tabela_comparativa(self):
@@ -43,6 +46,7 @@ class TestVisualization(unittest.TestCase):
             plotar_graficos_comparativos(resultados, caminho_imagem=str(caminho_imagem))
 
             self.assertTrue(caminho_imagem.exists())
+            self.assertGreater(caminho_imagem.stat().st_size, 0)
 
 if __name__ == "__main__":
     unittest.main()

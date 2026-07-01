@@ -33,16 +33,42 @@ O projeto foi desenvolvido em **Python 3** e utiliza um ambiente virtual isolado
 
 ## 🔄 2. Executando a Simulação
 
-O script principal realiza a simulação de execução de **200 processos** sobre cenários configurados com **1, 2, 4, 8 e 16 VMs**, testando ambos os algoritmos de escalonamento.
+O script principal realiza a simulação sobre cenários configurados com **1, 2, 4, 8 e 16 VMs**, testando ambos os algoritmos de escalonamento.
 
-Para rodar a simulação e gerar os relatórios e gráficos:
+Para rodar uma simulação informando o cenário e a quantidade de processos:
 ```bash
-MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py --cenario pesada --quantidade 200
+```
+
+Esse comando gera:
+```text
+resultados_pesada_200.png
+```
+
+Para gerar os 4 gráficos principais da apresentação:
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py --gerar-quatro
+```
+
+Esse modo executa:
+```text
+media 200
+media 1000
+pesada 200
+pesada 1000
+```
+
+E gera:
+```text
+resultados_media_200.png
+resultados_media_1000.png
+resultados_pesada_200.png
+resultados_pesada_1000.png
 ```
 O uso de `MPLCONFIGDIR=/tmp/matplotlib-cache` evita avisos de cache do Matplotlib em ambientes Linux onde a pasta padrão do usuário não pode ser escrita.
 
 * **Saída Esperada no Console**: Uma tabela comparativa exibindo o *Makespan*, *Tempo Médio de Espera*, *Throughput* e *Desvio de Carga* para cada cenário.
-* **Saída em Arquivo**: O gráfico comparativo de curvas de desempenho é salvo automaticamente na raiz do projeto com o nome `resultados_desempenho.png`.
+* **Saída em Arquivo**: O gráfico comparativo de curvas de desempenho é salvo automaticamente na raiz do projeto com o nome `resultados_<cenario>_<quantidade>.png`.
 
 ---
 
@@ -69,7 +95,7 @@ Fluxo usado na execução completa:
 1. `main.py` gera os processos.
 2. `Cloud` cria as VMs, escalona os processos e executa a simulação.
 3. O módulo de métricas calcula os indicadores.
-4. O módulo de visualização imprime a tabela e gera `resultados_desempenho.png`.
+4. O módulo de visualização imprime a tabela e gera o arquivo PNG do cenário executado.
 
 ---
 
@@ -89,7 +115,7 @@ MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest tests.test_metrics tests.
 
 Para confirmar que o gráfico foi gerado após executar o simulador:
 ```bash
-ls -l resultados_desempenho.png
+ls -l resultados_pesada_200.png
 ```
 
 ### Exemplos de Casos de Teste Mapeados no Código:
@@ -147,8 +173,8 @@ Antes da apresentação em sala, execute:
 ```bash
 MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest tests.test_metrics tests.test_visualization
 MPLCONFIGDIR=/tmp/matplotlib-cache python3 -m unittest discover -s tests
-MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py
-ls -l resultados_desempenho.png
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 main.py --gerar-quatro
+ls -l resultados_media_200.png resultados_media_1000.png resultados_pesada_200.png resultados_pesada_1000.png
 ```
 
 Critérios de sucesso:
@@ -156,4 +182,4 @@ Critérios de sucesso:
 * Os testes da parte de métricas e visualização passam.
 * A suíte completa passa.
 * O simulador imprime a tabela comparativa.
-* O arquivo `resultados_desempenho.png` é criado.
+* Os quatro arquivos PNG de resultado são criados.
